@@ -7,7 +7,15 @@ module.exports = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primaryColor1: 'var(--primaryColor1)',
+        primaryColor2: 'var(--primaryColor2)',
+        backgroundColor: 'var(--backgroundColor)',
+        normalFontColor: 'var(--normalFontColor)',
+        titleFontColor: 'var(--titleFontColor)',
+        shadowColor: 'var(--shadowColor)',
+      }},
   },
   plugins: [],
 }

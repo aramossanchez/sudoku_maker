@@ -3,5 +3,17 @@
 @tailwind utilities;
 
 :root {
-  /* --primaryColor1: # */
+  --primaryColor1: #6f40d7;
+  --primaryColor2: #74d2fe;
+  --backgroundColor: #000222;
+  --normalFontColor: #b9b9b9;
+  --titleFontColor: #fffffe;
+  --shadowColor: #7040d767;
+
+  background-color: var(--backgroundColor);
+  color: var(--normalFontColor);
+}
+
+html, body {
+  
 }
