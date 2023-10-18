@@ -119,6 +119,9 @@ export function UseSudokuSolver() {
     const copyOfSudokuValue = structuredClone(sudoku);
 
     //SABER SI LAS FILAS TIENEN SOLO UN NÚMERO POR RELLENAR, Y RELLENARLO
+    const check8NumbersInZone = (zone: { value: number, rowIndex: number, columnIndex: number, squareIndex: number }[]) => {
+
+    }
     //SABER SI LAS COLUMNAS TIENEN SOLO UN NÚMERO POR RELLENAR, Y RELLENARLO
     //SABER SI LAS CUADRÍCULAS TIENEN SOLO UN NÚMERO POR RELLENAR, Y RELLENARLO
 

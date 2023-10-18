@@ -2,6 +2,7 @@
 export const writeNumberAutomatically = (valuesOfRow: number[], valuesOfColumn: number[], valuesOfSquare: number[]) => {
   let value = 0;
   let index = 0;
+  let maxLoop = 30;
   // do {
   //   value = Math.floor(Math.random() * (9 - 1 + 1) + 1);
   //   index++;  
@@ -20,7 +21,7 @@ export const writeNumberAutomatically = (valuesOfRow: number[], valuesOfColumn: 
         }
       }
     } 
-  } while (index < 30);
+  } while (index < maxLoop);
   return 0;
 }
 
