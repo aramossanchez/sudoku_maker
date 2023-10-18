@@ -1,34 +1,78 @@
 //ESCRIBIR UN NÚMERO ALEATORIO QUE NO EXISTA YA EN LA ZONA (FILA, COLUMNA O CUADRÍCULA DE 9)
-export const writeNumberAutomatically = (valuesOfRow: number[], valuesOfColumn: number[], valuesOfSquare: number[]) => {
+export const writeNumberAutomatically = (
+  zone: { value: number, rowIndex: number, columnIndex: number, squareIndex: number }[],
+  cell: { value: number, rowIndex: number, columnIndex: number, squareIndex: number }
+): { value: number, rowIndex: number, columnIndex: number, squareIndex: number } => {
+
+  let writtenNumbers: number[] = [];
+  let validNumber = false;
   let value = 0;
   let index = 0;
-  let maxLoop = 30;
-  // do {
-  //   value = Math.floor(Math.random() * (9 - 1 + 1) + 1);
-  //   index++;  
-  // } while ((valuesOfRow.includes(value) || valuesOfColumn.includes(value) || valuesOfSquare.includes(value)) && index < 30);
-  // if (index === 30) {
-  //   value = 0;
-  // }
-  // return value;
+  let maxLoop = 60;
+  let modifiedCell = structuredClone(cell);
+
+  zone.forEach(cell => {
+    if (cell.value !== 0) {
+      writtenNumbers.push(cell.value);
+    }
+  });
+
   do {
+    //TODO: HAY QUE HACER QUE PRUEBE NÚMEROS DEL 1 AL 9, PERO SIN QUE SEAN ALEATORIOS (A VECES SE SUPERA EL MAXLOOP PERO SE PODRÍA PONER UN NÚMERO).
     value = Math.floor(Math.random() * (9 - 1 + 1) + 1);
     index++;
-    if (!valuesOfRow.includes(value)) {
-      if (!valuesOfColumn.includes(value)) {
-        if (!valuesOfSquare.includes(value)) {
-          return value;
-        }
+    if (!writtenNumbers.includes(value)) {
+      modifiedCell.value = value;
+      validNumber = true;
+    }
+  } while (index < maxLoop && !validNumber);
+
+  return modifiedCell;
+}
+
+// DEVOLVER UN NÚMERO VÁLIDO EN LA ZONA QUE SE LE PASA POR PARÁMETRO SI ESTA TIENE 8 NÚMEROS (FILA, COLUMNA O CUADRÍCULA)
+export const check8NumbersInZone = (zone: { value: number, rowIndex: number, columnIndex: number, squareIndex: number }[]) => {
+
+  let writtenNumbers: number[] = [];
+  let modifiedZone = structuredClone(zone);
+  modifiedZone.forEach(cell => {
+    if (cell.value !== 0 && !writtenNumbers.includes(cell.value)) {
+      writtenNumbers.push(cell.value);
+    }
+  });
+
+  if (writtenNumbers.length === 8) {
+    console.log('entro a completar esta zona, porque solo le falta un número por rellenar -> ', zone);
+    let emptyCell = modifiedZone.filter((cell) => cell.value === 0);
+    emptyCell[0] = writeNumberAutomatically(zone, emptyCell[0]);
+    for (let i = 0; i < modifiedZone.length; i++) {
+      let cell = modifiedZone[i];
+      if (cell.columnIndex === emptyCell[0].columnIndex && cell.rowIndex === emptyCell[0].rowIndex && cell.squareIndex === emptyCell[0].squareIndex) {
+        modifiedZone[i] = emptyCell[0];
       }
-    } 
-  } while (index < maxLoop);
-  return 0;
+    }
+  }
+
+
+  return modifiedZone;
+
+}
+
+export const convertSudokuOfRowsInSudokuOfColumns = (sudoku: { value: number, rowIndex: number, columnIndex: number, squareIndex: number }[][]) => {
+  let columnsOfSudoku: { value: number, rowIndex: number, columnIndex: number, squareIndex: number }[][] = [];
+  columnsOfSudoku = Array(9).fill(null).map(() => []);
+  sudoku.forEach((row, index) => {
+    row.forEach(cell => {
+      columnsOfSudoku[cell.columnIndex].push(cell);
+    });
+  });
+  return columnsOfSudoku;
 }
 
 //COMPROBAR QUE LA FILA TIENE TODOS SUS NÚMEROS DISTINTOS, Y QUE ESOS NÚMEROS ESTÁN ENTRE EL 1 Y EL 9.
 export const checkRow = (): boolean => {
   const readyRow = true;
-  
+
 }
 
 //COMPROBAR QUE LA CUADRÍCULA DE 9 TIENE TODOS SUS NÚMEROS DISTINTOS, Y QUE ESOS NÚMEROS ESTÁN ENTRE EL 1 Y EL 9.
