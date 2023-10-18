@@ -5,10 +5,10 @@
 :root {
   --primaryColor1: #6f40d7;
   --primaryColor2: #74d2fe;
-  --backgroundColor: #000222;
+  --backgroundColor: #968454;
   --normalFontColor: #b9b9b9;
   --titleFontColor: #fffffe;
-  --shadowColor: #7040d767;
+  --shadowColor: #4d4d4da9;
 
   background-color: var(--backgroundColor);
   color: var(--normalFontColor);

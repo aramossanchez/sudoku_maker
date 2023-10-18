@@ -10,7 +10,7 @@ export function SudokuSolver3Container() {
   return (
     <section className='h-[93vh] w-full flex flex-col items-center justify-center gap-8'>
       <span className='text-5xl font-medium text-titleFontColor'>Sudoku Solver</span>
-      <span className='text-xl font-medium text-normalFontColor'>Número de intentos: {tries}</span>
+      <span className='text-xl font-medium text-normalFontColor'>Number of tries: {tries}</span>
       <article className={`
         flex flex-col relative
         ${style.sudoku_container}
