@@ -1,12 +1,13 @@
 .loader {
   width: 100px;
   height: 100px;
-  border: 2px solid var(--primaryColor1);
+  border: 2px solid var(--primaryColor4);
+  background-color: var(--primaryColor2);
   border-radius: 50%;
   display: inline-block;
   position: relative;
   box-sizing: border-box;
-  animation: rotation 1s linear infinite;
+  animation: rotation 1.5s linear infinite;
 }
 .loader::after {
   content: '';  
@@ -14,8 +15,8 @@
   position: absolute;
   left: 50%;
   top: 0;
-  background: var(--primaryColor2);
-  width: 3px;
+  background: var(--primaryColor4);
+  width: 5px;
   height: 50px;
   transform: translateX(-50%);
 }

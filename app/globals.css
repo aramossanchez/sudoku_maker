@@ -3,18 +3,17 @@
 @tailwind utilities;
 
 :root {
-  --primaryColor1: #ACBBBA;
-  --primaryColor2: #849190;
-  --backgroundColor: #F5CAAE;
-  --normalFontColor: #1a1a1a;
-  --titleFontColor: #181818;
+  --primaryColor1: #ffa883;
+  --primaryColor2: #fde3c8;
+  --primaryColor3: #fcede1;
+  --primaryColor4: #6fc7e1;
+  --primaryColor4Darker: #579fb4;
+  --normalFontColor: #1d1d1d;
   --shadowColor: #4d4d4da9;
-  --cellColor: #F8D9CF;
-  --cellSelectedColor: #9ef0ff;
   --buttonShadow: 2px 3px 5px 2px var(--shadowColor);
-  --buttonShadowClick: 2px 3px 5px 0px var(--shadowColor);
+  --buttonShadowClick: 2px 3px 4px 0px var(--shadowColor);
 
-  background-color: var(--backgroundColor);
+  background-color: var(--primaryColor3);
   color: var(--normalFontColor);
 }
 

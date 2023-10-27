@@ -11,12 +11,11 @@ module.exports = {
       colors: {
         primaryColor1: 'var(--primaryColor1)',
         primaryColor2: 'var(--primaryColor2)',
-        backgroundColor: 'var(--backgroundColor)',
+        primaryColor3: 'var(--primaryColor3)',
+        primaryColor4: 'var(--primaryColor4)',
+        primaryColor4Darker: 'var(--primaryColor4Darker)',
         normalFontColor: 'var(--normalFontColor)',
-        titleFontColor: 'var(--titleFontColor)',
         shadowColor: 'var(--shadowColor)',
-        cellColor: 'var(--cellColor)',
-        cellSelectedColor: 'var(--cellSelectedColor)',
       }},
       boxShadow: {
         buttonShadow: 'var(--buttonShadow)',
