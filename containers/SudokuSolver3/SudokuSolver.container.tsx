@@ -2,6 +2,7 @@ import { LoaderComponent } from '@/components/Loader/Loader.component';
 import { UseSudokuSolver } from './SudokuSolver.hook';
 import { SudokuCellComponent } from '@/components/SudokuCell/SudokuCell.component';
 import style from './SudokuSolver.module.css';
+import { ButtonComponent } from '@/components/Button/Button.component';
 
 export function SudokuSolver3Container() {
 
@@ -11,8 +12,7 @@ export function SudokuSolver3Container() {
     <section className='h-[93vh] w-full flex flex-col items-center justify-center gap-8'>
       <span className='text-5xl font-medium text-titleFontColor'>SUDOKU SOLVER</span>
       <article className={`
-        flex flex-col relative
-        ${style.sudoku_container}
+        flex flex-col relative border-[8px] border-black rounded-lg
       `}>
         {/* LOADER */}
         <div className={`${solving ? 'block' : 'hidden'} ${style.loader} absolute opacity-100`}>
@@ -36,19 +36,15 @@ export function SudokuSolver3Container() {
           )
         })}
       </article>
-      <div className='flex flex-row gap-3 items-center'>
-        <button
-          className='px-4 py-1 border-[1px] border-backgroundColor text-normalFontColor font-medium rounded-lg ease-in-out duration-200 hover:opacity-80 bg-primaryColor1'
-          onClick={() => { checkAndResolveFullSudoku(sudokuValues) }}
-        >
-          Resolve
-        </button>
-        <button
-          className='px-4 py-1 border-[1px] border-backgroundColor text-normalFontColor font-medium rounded-lg ease-in-out duration-200 hover:opacity-80 bg-primaryColor1'
-          onClick={() => { resetSudoku() }}
-        >
-          Reset
-        </button>
+      <div className='flex flex-row gap-6 items-center'>
+        <ButtonComponent
+          text='RESOLVE'
+          onclick={() => { checkAndResolveFullSudoku(sudokuValues) }}
+        />
+        <ButtonComponent
+          text='RESET'
+          onclick={() => { resetSudoku() }}
+        />
       </div>
     </section>
   )

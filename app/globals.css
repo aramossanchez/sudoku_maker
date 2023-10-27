@@ -4,11 +4,15 @@
 
 :root {
   --primaryColor1: #ACBBBA;
-  --primaryColor2: #74d2fe;
+  --primaryColor2: #849190;
   --backgroundColor: #F5CAAE;
   --normalFontColor: #1a1a1a;
   --titleFontColor: #181818;
   --shadowColor: #4d4d4da9;
+  --cellColor: #F8D9CF;
+  --cellSelectedColor: #9ef0ff;
+  --buttonShadow: 2px 3px 5px 2px var(--shadowColor);
+  --buttonShadowClick: 2px 3px 5px 0px var(--shadowColor);
 
   background-color: var(--backgroundColor);
   color: var(--normalFontColor);

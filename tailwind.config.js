@@ -15,7 +15,13 @@ module.exports = {
         normalFontColor: 'var(--normalFontColor)',
         titleFontColor: 'var(--titleFontColor)',
         shadowColor: 'var(--shadowColor)',
+        cellColor: 'var(--cellColor)',
+        cellSelectedColor: 'var(--cellSelectedColor)',
       }},
+      boxShadow: {
+        buttonShadow: 'var(--buttonShadow)',
+        buttonShadowClick: 'var(--buttonShadowClick)',
+      }
   },
   plugins: [],
 }

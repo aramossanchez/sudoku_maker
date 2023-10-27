@@ -10,7 +10,7 @@ export function SudokuCellComponent({cell = {value: 0, rowIndex: 0, columnIndex:
         maxLength={1}
         type="number"
         className={`
-          w-[40px] h-[40px] text-center font-medium focus:outline-0 focus:bg-normalFontColor border-[1px] border-black text-black
+          bg-cellColor w-[40px] h-[40px] text-center font-medium focus:outline-0 focus:bg-cellSelectedColor border-[1px] border-black text-black
           ${cell.rowIndex !== 8 ? 'border-b-0' : ''}
           ${cell.rowIndex === 2 || cell.rowIndex === 5 ? 'border-b-[1px]' : ''}
           ${cell.columnIndex !== 8 ? 'border-r-0' : ''}
