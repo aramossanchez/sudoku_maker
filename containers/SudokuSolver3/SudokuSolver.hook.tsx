@@ -1,111 +1,12 @@
 import { useState } from "react";
-import { check8NumbersInZone, checkAndResolveRow, checkAndResolveSquare, checkRow, checkSquare, convertSquareSudokuInNormalSudoku, convertSudokuOfRowsInSudokuOfColumns, obtainSudokuSquares, writeNumberAutomatically } from "./Services/Operations.service";
+import { check8NumbersInZone, checkAndResolveRow, checkAndResolveSquare, checkPosibleNumbersInCell, checkSquare, convertSquareSudokuInNormalSudoku, convertSudokuOfRowsInSudokuOfColumns, convertSudokuOfRowsInSudokuOfSquares, obtainSudokuSquares, writeNumberAutomatically } from "./Services/Operations.service";
+import { sudoku_muyfacil_01 } from '../../data/sudokus/sudoku_muyfacil_01';
+import { sudoku_normal_01 } from '../../data/sudokus/sudoku_normal_01';
 
 export function UseSudokuSolver() {
 
-  const [sudokuValues, setSudokuValues] = useState([
-    [
-      { value: 1, rowIndex: 0, columnIndex: 0, squareIndex: 0 },
-      { value: 5, rowIndex: 0, columnIndex: 1, squareIndex: 0 },
-      { value: 3, rowIndex: 0, columnIndex: 2, squareIndex: 0 },
-      { value: 6, rowIndex: 0, columnIndex: 3, squareIndex: 1 },
-      { value: 7, rowIndex: 0, columnIndex: 4, squareIndex: 1 },
-      { value: 4, rowIndex: 0, columnIndex: 5, squareIndex: 1 },
-      { value: 2, rowIndex: 0, columnIndex: 6, squareIndex: 2 },
-      { value: 8, rowIndex: 0, columnIndex: 7, squareIndex: 2 },
-      { value: 0, rowIndex: 0, columnIndex: 8, squareIndex: 2 },
-    ],
-    [
-      { value: 0, rowIndex: 1, columnIndex: 0, squareIndex: 0 },
-      { value: 0, rowIndex: 1, columnIndex: 1, squareIndex: 0 },
-      { value: 9, rowIndex: 1, columnIndex: 2, squareIndex: 0 },
-      { value: 0, rowIndex: 1, columnIndex: 3, squareIndex: 1 },
-      { value: 0, rowIndex: 1, columnIndex: 4, squareIndex: 1 },
-      { value: 0, rowIndex: 1, columnIndex: 5, squareIndex: 1 },
-      { value: 0, rowIndex: 1, columnIndex: 6, squareIndex: 2 },
-      { value: 0, rowIndex: 1, columnIndex: 7, squareIndex: 2 },
-      { value: 0, rowIndex: 1, columnIndex: 8, squareIndex: 2 },
-    ],
-    [
-      { value: 0, rowIndex: 2, columnIndex: 0, squareIndex: 0 },
-      { value: 3, rowIndex: 2, columnIndex: 1, squareIndex: 0 },
-      { value: 2, rowIndex: 2, columnIndex: 2, squareIndex: 0 },
-      { value: 0, rowIndex: 2, columnIndex: 3, squareIndex: 1 },
-      { value: 6, rowIndex: 2, columnIndex: 4, squareIndex: 1 },
-      { value: 9, rowIndex: 2, columnIndex: 5, squareIndex: 1 },
-      { value: 7, rowIndex: 2, columnIndex: 6, squareIndex: 2 },
-      { value: 8, rowIndex: 2, columnIndex: 7, squareIndex: 2 },
-      { value: 0, rowIndex: 2, columnIndex: 8, squareIndex: 2 },
-    ],
-    [
-      { value: 6, rowIndex: 3, columnIndex: 0, squareIndex: 3 },
-      { value: 0, rowIndex: 3, columnIndex: 1, squareIndex: 3 },
-      { value: 1, rowIndex: 3, columnIndex: 2, squareIndex: 3 },
-      { value: 0, rowIndex: 3, columnIndex: 3, squareIndex: 4 },
-      { value: 7, rowIndex: 3, columnIndex: 4, squareIndex: 4 },
-      { value: 0, rowIndex: 3, columnIndex: 5, squareIndex: 4 },
-      { value: 0, rowIndex: 3, columnIndex: 6, squareIndex: 5 },
-      { value: 0, rowIndex: 3, columnIndex: 7, squareIndex: 5 },
-      { value: 4, rowIndex: 3, columnIndex: 8, squareIndex: 5 },
-    ],
-    [
-      { value: 9, rowIndex: 4, columnIndex: 0, squareIndex: 3 },
-      { value: 4, rowIndex: 4, columnIndex: 1, squareIndex: 3 },
-      { value: 5, rowIndex: 4, columnIndex: 2, squareIndex: 3 },
-      { value: 3, rowIndex: 4, columnIndex: 3, squareIndex: 4 },
-      { value: 2, rowIndex: 4, columnIndex: 4, squareIndex: 4 },
-      { value: 8, rowIndex: 4, columnIndex: 5, squareIndex: 4 },
-      { value: 0, rowIndex: 4, columnIndex: 6, squareIndex: 5 },
-      { value: 0, rowIndex: 4, columnIndex: 7, squareIndex: 5 },
-      { value: 0, rowIndex: 4, columnIndex: 8, squareIndex: 5 },
-    ],
-    [
-      { value: 7, rowIndex: 5, columnIndex: 0, squareIndex: 3 },
-      { value: 0, rowIndex: 5, columnIndex: 1, squareIndex: 3 },
-      { value: 0, rowIndex: 5, columnIndex: 2, squareIndex: 3 },
-      { value: 4, rowIndex: 5, columnIndex: 3, squareIndex: 4 },
-      { value: 1, rowIndex: 5, columnIndex: 4, squareIndex: 4 },
-      { value: 0, rowIndex: 5, columnIndex: 5, squareIndex: 4 },
-      { value: 8, rowIndex: 5, columnIndex: 6, squareIndex: 5 },
-      { value: 5, rowIndex: 5, columnIndex: 7, squareIndex: 5 },
-      { value: 0, rowIndex: 5, columnIndex: 8, squareIndex: 5 },
-    ],
-    [
-      { value: 3, rowIndex: 6, columnIndex: 0, squareIndex: 6 },
-      { value: 0, rowIndex: 6, columnIndex: 1, squareIndex: 6 },
-      { value: 7, rowIndex: 6, columnIndex: 2, squareIndex: 6 },
-      { value: 0, rowIndex: 6, columnIndex: 3, squareIndex: 7 },
-      { value: 0, rowIndex: 6, columnIndex: 4, squareIndex: 7 },
-      { value: 0, rowIndex: 6, columnIndex: 5, squareIndex: 7 },
-      { value: 0, rowIndex: 6, columnIndex: 6, squareIndex: 8 },
-      { value: 0, rowIndex: 6, columnIndex: 7, squareIndex: 8 },
-      { value: 0, rowIndex: 6, columnIndex: 8, squareIndex: 8 },
-    ],
-    [
-      { value: 2, rowIndex: 7, columnIndex: 0, squareIndex: 6 },
-      { value: 0, rowIndex: 7, columnIndex: 1, squareIndex: 6 },
-      { value: 8, rowIndex: 7, columnIndex: 2, squareIndex: 6 },
-      { value: 6, rowIndex: 7, columnIndex: 3, squareIndex: 7 },
-      { value: 4, rowIndex: 7, columnIndex: 4, squareIndex: 7 },
-      { value: 0, rowIndex: 7, columnIndex: 5, squareIndex: 7 },
-      { value: 0, rowIndex: 7, columnIndex: 6, squareIndex: 8 },
-      { value: 3, rowIndex: 7, columnIndex: 7, squareIndex: 8 },
-      { value: 0, rowIndex: 7, columnIndex: 8, squareIndex: 8 },
-    ],
-    [
-      { value: 5, rowIndex: 8, columnIndex: 0, squareIndex: 6 },
-      { value: 1, rowIndex: 8, columnIndex: 1, squareIndex: 6 },
-      { value: 4, rowIndex: 8, columnIndex: 2, squareIndex: 6 },
-      { value: 2, rowIndex: 8, columnIndex: 3, squareIndex: 7 },
-      { value: 7, rowIndex: 8, columnIndex: 4, squareIndex: 7 },
-      { value: 3, rowIndex: 8, columnIndex: 5, squareIndex: 7 },
-      { value: 6, rowIndex: 8, columnIndex: 6, squareIndex: 8 },
-      { value: 9, rowIndex: 8, columnIndex: 7, squareIndex: 8 },
-      { value: 0, rowIndex: 8, columnIndex: 8, squareIndex: 8 },
-    ],
-  ]);
+  const [sudokuValues, setSudokuValues] = useState(sudoku_normal_01);
   const [solving, setSolving] = useState(false);
-  const [tries, setTries] = useState(0);
 
   // INSERTAR UN VALOR EN UNA CELDA DEL SUDOKU
   const insertValueInCell = (rowIndex: number, columnIndex: number, squareIndex: number, value: number) => {
@@ -122,10 +23,10 @@ export function UseSudokuSolver() {
     copyOfSudokuValue.forEach((row, index) => {
       copyOfSudokuValue[index] = check8NumbersInZone(row);
     });
-    
+
     //SABER SI LAS COLUMNAS TIENEN SOLO UN NÚMERO POR RELLENAR, Y RELLENARLO
     const columnsOfSudoku = convertSudokuOfRowsInSudokuOfColumns(copyOfSudokuValue);
-    
+
     columnsOfSudoku.forEach((column, index) => {
       columnsOfSudoku[index] = check8NumbersInZone(column);
     })
@@ -135,149 +36,85 @@ export function UseSudokuSolver() {
         copyOfSudokuValue[cell.rowIndex][cell.columnIndex] = cell;
       });
     });
-    
-    // //SABER SI LAS CUADRÍCULAS TIENEN SOLO UN NÚMERO POR RELLENAR, Y RELLENARLO
 
-    // //OBTENER CELLS CON LOS VALORES QUE TIENE CADA SQUARE
-    // const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    // const cellsInSquare: { value: number, rowIndex: number, columnIndex: number, squareIndex: number }[][] = [];
-    // numbers.forEach(number => {
-    //   cellsInSquare.push(copyOfSudokuValue.flat().filter((cell) => cell.value !== 0 && cell.squareIndex === (number - 1)));
-    // });
+    //SABER SI LAS CUADRÍCULAS TIENEN SOLO UN NÚMERO POR RELLENAR, Y RELLENARLO
+    const squaresOfSudoku = convertSudokuOfRowsInSudokuOfSquares(copyOfSudokuValue);
 
-    // //OBTENER SOLO LOS VALORES QUE TIENE CADA SQUARE
-    // const numbersInSquare: number[][] = []
-    // for (let i = 0; i < cellsInSquare.length; i++) {
-    //   const rows: number[] = [];
-    //   for (let e = 0; e < cellsInSquare[i].length; e++) {
-    //     rows.push(cellsInSquare[i][e].value);
-    //   }
-    //   numbersInSquare.push(rows);
-    // }
+    squaresOfSudoku.forEach((column, index) => {
+      squaresOfSudoku[index] = check8NumbersInZone(column);
+    })
 
-    // //OBTENER QUÉ VALORES TIENE DISPONIBLES PARA RELLENAR CADA SQUARE
-    // const availableNumberInSquare: number[][] = [];
-    // for (let i = 0; i < numbersInSquare.length; i++) {
-    //   const availableNumbers: number[] = [];
-    //   numbers.forEach(number => {
-    //     if (!numbersInSquare[i].includes(number)) {
-    //       availableNumbers.push(number)
-    //     }
-    //   });
-    //   availableNumberInSquare.push(availableNumbers);
-    // }
+    squaresOfSudoku.forEach(column => {
+      column.forEach(cell => {
+        copyOfSudokuValue[cell.rowIndex][cell.columnIndex] = cell;
+      });
+    });
 
     // //SABER QUÉ NÚMEROS SE PUEDEN PONER EN CADA CELDA, REVISANDO CON FILAS Y COLUMNAS. SI SOLO SE PUEDE PONER UNO, RELLENARLO.
+    const sudokuInOnlyArray = copyOfSudokuValue.reduce((acc, curr) => {
+      return acc.concat(curr);
+    }, []);
 
-    // console.log(availableNumberInSquare);
+    const cellsWithMultiplesValues: { value: number, rowIndex: number, columnIndex: number, squareIndex: number }[] = [];
+
+    sudokuInOnlyArray.forEach(cellInArray => {
+      if (cellInArray.value === 0) {
+        const posibleValuesInCell: number[] = checkPosibleNumbersInCell(cellInArray, copyOfSudokuValue);
+        if (posibleValuesInCell.length === 1) {
+          copyOfSudokuValue[cellInArray.rowIndex][cellInArray.columnIndex].value = posibleValuesInCell[0];
+        } else {
+          cellsWithMultiplesValues.push(cellInArray);
+        }
+      }
+    });
+
+    // REVISAR NÚMEROS DISPONIBLES EN CADA CELDA DE CADA SQUARE. SI DENTRO DE UNA SQUARE HAY ALGÚN NÚMERO DE LOS POSIBLES POR CADA CELDA QUE SOLO SE PUEDE PONER EN UNA CELDA, SE RELLENA LA CELDA CON ESE VALOR.
+
+    // AQUÍ VOY A GUARDAR TODAS LAS CELDAS DE LA SQUARE
+    let cellsWithPosibleValuesInSquares: { values: number[], rowIndex: number, columnIndex: number, squareIndex: number }[] = [];
+
+    // RECORRO TODOS LOS SQUARES
+    for (let i = 0; i < [0, 1, 2, 3, 4, 5, 6, 7, 8].length; i++) {
+      //
+      const posibleValuesInSquares = cellsWithMultiplesValues.filter((cellInArray) => cellInArray.squareIndex === [1, 2, 3, 4, 5, 6, 7, 8][i]);
+      posibleValuesInSquares.forEach(cellInArray => {
+        const posibleValuesInCell: number[] = checkPosibleNumbersInCell(cellInArray, copyOfSudokuValue);
+        cellsWithPosibleValuesInSquares.push({ values: posibleValuesInCell, rowIndex: cellInArray.rowIndex, columnIndex: cellInArray.columnIndex, squareIndex: cellInArray.squareIndex });
+      });
+
+      let countOfNumbers: { [key: number]: number } = {};
+
+      cellsWithPosibleValuesInSquares.forEach(item => {
+        item.values.forEach(number => {
+          countOfNumbers[number] = (countOfNumbers[number] || 0) + 1;
+        });
+      });
+
+      console.log('posible numbers in square ', [1, 2, 3, 4, 5, 6, 7, 8][i], ' --> ', countOfNumbers);
+      
+      const posibleNumbersInSquare: string[] = Object.keys(countOfNumbers);
+
+      posibleNumbersInSquare.forEach(item => {
+        if (countOfNumbers[+item] === 1) {
+          const cellToBeChanged = cellsWithPosibleValuesInSquares.find((cellInArray) => cellInArray.values.includes(+item));
+          if (cellToBeChanged) {
+            copyOfSudokuValue[cellToBeChanged.rowIndex][cellToBeChanged.columnIndex].value = +item;
+          }
+        }
+      });
+
+      countOfNumbers = {};
+      cellsWithPosibleValuesInSquares = [];
+
+    }
+
     setSudokuValues(copyOfSudokuValue);
     setSolving(false);
   }
 
   const resetSudoku = () => {
-    setTries(0);
-    setSudokuValues([
-      [
-        { value: 1, rowIndex: 0, columnIndex: 0, squareIndex: 0 },
-        { value: 5, rowIndex: 0, columnIndex: 1, squareIndex: 0 },
-        { value: 3, rowIndex: 0, columnIndex: 2, squareIndex: 0 },
-        { value: 6, rowIndex: 0, columnIndex: 3, squareIndex: 1 },
-        { value: 7, rowIndex: 0, columnIndex: 4, squareIndex: 1 },
-        { value: 4, rowIndex: 0, columnIndex: 5, squareIndex: 1 },
-        { value: 2, rowIndex: 0, columnIndex: 6, squareIndex: 2 },
-        { value: 8, rowIndex: 0, columnIndex: 7, squareIndex: 2 },
-        { value: 0, rowIndex: 0, columnIndex: 8, squareIndex: 2 },
-      ],
-      [
-        { value: 0, rowIndex: 1, columnIndex: 0, squareIndex: 0 },
-        { value: 0, rowIndex: 1, columnIndex: 1, squareIndex: 0 },
-        { value: 9, rowIndex: 1, columnIndex: 2, squareIndex: 0 },
-        { value: 0, rowIndex: 1, columnIndex: 3, squareIndex: 1 },
-        { value: 0, rowIndex: 1, columnIndex: 4, squareIndex: 1 },
-        { value: 0, rowIndex: 1, columnIndex: 5, squareIndex: 1 },
-        { value: 0, rowIndex: 1, columnIndex: 6, squareIndex: 2 },
-        { value: 0, rowIndex: 1, columnIndex: 7, squareIndex: 2 },
-        { value: 0, rowIndex: 1, columnIndex: 8, squareIndex: 2 },
-      ],
-      [
-        { value: 0, rowIndex: 2, columnIndex: 0, squareIndex: 0 },
-        { value: 3, rowIndex: 2, columnIndex: 1, squareIndex: 0 },
-        { value: 2, rowIndex: 2, columnIndex: 2, squareIndex: 0 },
-        { value: 0, rowIndex: 2, columnIndex: 3, squareIndex: 1 },
-        { value: 6, rowIndex: 2, columnIndex: 4, squareIndex: 1 },
-        { value: 9, rowIndex: 2, columnIndex: 5, squareIndex: 1 },
-        { value: 7, rowIndex: 2, columnIndex: 6, squareIndex: 2 },
-        { value: 8, rowIndex: 2, columnIndex: 7, squareIndex: 2 },
-        { value: 0, rowIndex: 2, columnIndex: 8, squareIndex: 2 },
-      ],
-      [
-        { value: 6, rowIndex: 3, columnIndex: 0, squareIndex: 3 },
-        { value: 0, rowIndex: 3, columnIndex: 1, squareIndex: 3 },
-        { value: 1, rowIndex: 3, columnIndex: 2, squareIndex: 3 },
-        { value: 0, rowIndex: 3, columnIndex: 3, squareIndex: 4 },
-        { value: 7, rowIndex: 3, columnIndex: 4, squareIndex: 4 },
-        { value: 0, rowIndex: 3, columnIndex: 5, squareIndex: 4 },
-        { value: 0, rowIndex: 3, columnIndex: 6, squareIndex: 5 },
-        { value: 0, rowIndex: 3, columnIndex: 7, squareIndex: 5 },
-        { value: 4, rowIndex: 3, columnIndex: 8, squareIndex: 5 },
-      ],
-      [
-        { value: 9, rowIndex: 4, columnIndex: 0, squareIndex: 3 },
-        { value: 4, rowIndex: 4, columnIndex: 1, squareIndex: 3 },
-        { value: 5, rowIndex: 4, columnIndex: 2, squareIndex: 3 },
-        { value: 3, rowIndex: 4, columnIndex: 3, squareIndex: 4 },
-        { value: 2, rowIndex: 4, columnIndex: 4, squareIndex: 4 },
-        { value: 8, rowIndex: 4, columnIndex: 5, squareIndex: 4 },
-        { value: 0, rowIndex: 4, columnIndex: 6, squareIndex: 5 },
-        { value: 0, rowIndex: 4, columnIndex: 7, squareIndex: 5 },
-        { value: 0, rowIndex: 4, columnIndex: 8, squareIndex: 5 },
-      ],
-      [
-        { value: 7, rowIndex: 5, columnIndex: 0, squareIndex: 3 },
-        { value: 0, rowIndex: 5, columnIndex: 1, squareIndex: 3 },
-        { value: 0, rowIndex: 5, columnIndex: 2, squareIndex: 3 },
-        { value: 4, rowIndex: 5, columnIndex: 3, squareIndex: 4 },
-        { value: 1, rowIndex: 5, columnIndex: 4, squareIndex: 4 },
-        { value: 0, rowIndex: 5, columnIndex: 5, squareIndex: 4 },
-        { value: 8, rowIndex: 5, columnIndex: 6, squareIndex: 5 },
-        { value: 5, rowIndex: 5, columnIndex: 7, squareIndex: 5 },
-        { value: 0, rowIndex: 5, columnIndex: 8, squareIndex: 5 },
-      ],
-      [
-        { value: 3, rowIndex: 6, columnIndex: 0, squareIndex: 6 },
-        { value: 0, rowIndex: 6, columnIndex: 1, squareIndex: 6 },
-        { value: 7, rowIndex: 6, columnIndex: 2, squareIndex: 6 },
-        { value: 0, rowIndex: 6, columnIndex: 3, squareIndex: 7 },
-        { value: 0, rowIndex: 6, columnIndex: 4, squareIndex: 7 },
-        { value: 0, rowIndex: 6, columnIndex: 5, squareIndex: 7 },
-        { value: 0, rowIndex: 6, columnIndex: 6, squareIndex: 8 },
-        { value: 0, rowIndex: 6, columnIndex: 7, squareIndex: 8 },
-        { value: 0, rowIndex: 6, columnIndex: 8, squareIndex: 8 },
-      ],
-      [
-        { value: 2, rowIndex: 7, columnIndex: 0, squareIndex: 6 },
-        { value: 0, rowIndex: 7, columnIndex: 1, squareIndex: 6 },
-        { value: 8, rowIndex: 7, columnIndex: 2, squareIndex: 6 },
-        { value: 6, rowIndex: 7, columnIndex: 3, squareIndex: 7 },
-        { value: 4, rowIndex: 7, columnIndex: 4, squareIndex: 7 },
-        { value: 0, rowIndex: 7, columnIndex: 5, squareIndex: 7 },
-        { value: 0, rowIndex: 7, columnIndex: 6, squareIndex: 8 },
-        { value: 3, rowIndex: 7, columnIndex: 7, squareIndex: 8 },
-        { value: 0, rowIndex: 7, columnIndex: 8, squareIndex: 8 },
-      ],
-      [
-        { value: 5, rowIndex: 8, columnIndex: 0, squareIndex: 6 },
-        { value: 1, rowIndex: 8, columnIndex: 1, squareIndex: 6 },
-        { value: 4, rowIndex: 8, columnIndex: 2, squareIndex: 6 },
-        { value: 2, rowIndex: 8, columnIndex: 3, squareIndex: 7 },
-        { value: 7, rowIndex: 8, columnIndex: 4, squareIndex: 7 },
-        { value: 3, rowIndex: 8, columnIndex: 5, squareIndex: 7 },
-        { value: 6, rowIndex: 8, columnIndex: 6, squareIndex: 8 },
-        { value: 9, rowIndex: 8, columnIndex: 7, squareIndex: 8 },
-        { value: 0, rowIndex: 8, columnIndex: 8, squareIndex: 8 },
-      ],
-    ])
+    setSudokuValues(sudoku_normal_01)
   }
 
-  return { tries, sudokuValues, solving, insertValueInCell, checkAndResolveFullSudoku, resetSudoku }
+  return { sudokuValues, solving, insertValueInCell, checkAndResolveFullSudoku, resetSudoku }
 }

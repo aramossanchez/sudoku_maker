@@ -1,3 +1,5 @@
+const NUMBERS_OF_SUDOKU = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
 //ESCRIBIR UN NÚMERO ALEATORIO QUE NO EXISTA YA EN LA ZONA (FILA, COLUMNA O CUADRÍCULA DE 9)
 export const writeNumberAutomatically = (
   zone: { value: number, rowIndex: number, columnIndex: number, squareIndex: number }[],
@@ -8,7 +10,7 @@ export const writeNumberAutomatically = (
   let validNumber = false;
   let value = 0;
   let index = 0;
-  let maxLoop = 60;
+  const MAX_LOOP = 60;
   let modifiedCell = structuredClone(cell);
 
   zone.forEach(cell => {
@@ -18,14 +20,14 @@ export const writeNumberAutomatically = (
   });
 
   do {
-    //TODO: HAY QUE HACER QUE PRUEBE NÚMEROS DEL 1 AL 9, PERO SIN QUE SEAN ALEATORIOS (A VECES SE SUPERA EL MAXLOOP PERO SE PODRÍA PONER UN NÚMERO).
+    //TODO: HAY QUE HACER QUE PRUEBE NÚMEROS DEL 1 AL 9, PERO SIN QUE SEAN ALEATORIOS (A VECES SE SUPERA EL MAX_LOOP PERO SE PODRÍA PONER UN NÚMERO).
     value = Math.floor(Math.random() * (9 - 1 + 1) + 1);
     index++;
     if (!writtenNumbers.includes(value)) {
       modifiedCell.value = value;
       validNumber = true;
     }
-  } while (index < maxLoop && !validNumber);
+  } while (index < MAX_LOOP && !validNumber);
 
   return modifiedCell;
 }
@@ -58,20 +60,125 @@ export const check8NumbersInZone = (zone: { value: number, rowIndex: number, col
 
 }
 
+//DEVOLVER UN SUDOKU NORMAL EN UN SUDOKU ORDENADO POR COLUMNAS
 export const convertSudokuOfRowsInSudokuOfColumns = (sudoku: { value: number, rowIndex: number, columnIndex: number, squareIndex: number }[][]) => {
-  let columnsOfSudoku: { value: number, rowIndex: number, columnIndex: number, squareIndex: number }[][] = [];
-  columnsOfSudoku = Array(9).fill(null).map(() => []);
-  sudoku.forEach((row, index) => {
+  let squaresOfSudoku: { value: number, rowIndex: number, columnIndex: number, squareIndex: number }[][] = [];
+  squaresOfSudoku = Array(9).fill(null).map(() => []);
+  sudoku.forEach((row) => {
     row.forEach(cell => {
-      columnsOfSudoku[cell.columnIndex].push(cell);
+      squaresOfSudoku[cell.columnIndex].push(cell);
     });
   });
-  return columnsOfSudoku;
+  return squaresOfSudoku;
 }
 
-//COMPROBAR QUE LA FILA TIENE TODOS SUS NÚMEROS DISTINTOS, Y QUE ESOS NÚMEROS ESTÁN ENTRE EL 1 Y EL 9.
-export const checkRow = (): boolean => {
-  const readyRow = true;
+//DEVOLVER UN SUDOKU NORMAL EN UN SUDOKU ORDENADO POR CUADRÍCULAS
+export const convertSudokuOfRowsInSudokuOfSquares = (sudoku: { value: number, rowIndex: number, columnIndex: number, squareIndex: number }[][]) => {
+  let squaresOfSudoku: { value: number, rowIndex: number, columnIndex: number, squareIndex: number }[][] = [];
+  squaresOfSudoku = Array(9).fill(null).map(() => []);
+  sudoku.forEach((row) => {
+    row.forEach(cell => {
+      squaresOfSudoku[cell.squareIndex].push(cell);
+    });
+  });
+  return squaresOfSudoku;
+}
+
+export const checkPosibleNumbersInCell = (
+  cell: { value: number, rowIndex: number, columnIndex: number, squareIndex: number },
+  sudoku: { value: number, rowIndex: number, columnIndex: number, squareIndex: number }[][]  
+) => {
+  
+  const sudokuInOnlyArray = sudoku.reduce((acc, curr) => {
+    return acc.concat(curr);
+  }, []);
+
+  // SABER NÚMEROS DISPONIBLES EN LA SQUARE ACTUAL
+  const freeNumbersInSquare: number[] = [];
+  
+  const cellsOfCurrentSquare = sudokuInOnlyArray.filter((cellInArray) => cellInArray.squareIndex === cell.squareIndex);
+  const numbersInSquare = cellsOfCurrentSquare.map((cellOfSquare) => {
+    return (
+      cellOfSquare.value
+    )
+  });
+
+  NUMBERS_OF_SUDOKU.forEach(number => {
+    if (!numbersInSquare.includes(number)) {
+      freeNumbersInSquare.push(number);
+    }
+  });
+
+  // console.log(freeNumbersInSquare);
+
+  // SABER NÚMEROS DISPONIBLES EN LA ROW ACTUAL
+  const freeNumbersInRow: number[] = [];
+  
+  const cellsOfCurrentRow = sudokuInOnlyArray.filter((cellInArray) => cellInArray.rowIndex === cell.rowIndex);
+  const numbersInRow = cellsOfCurrentRow.map((cellOfRow) => {
+    return (
+      cellOfRow.value
+    )
+  });
+
+  NUMBERS_OF_SUDOKU.forEach(number => {
+    if (!numbersInRow.includes(number)) {
+      freeNumbersInRow.push(number);
+    }
+  });
+
+  // console.log(freeNumbersInRow);
+
+  // SABER NÚMEROS DISPONIBLES EN LA COLUMN ACTUAL
+  const freeNumbersInColumn: number[] = [];
+  
+  const cellsOfCurrentColumn = sudokuInOnlyArray.filter((cellInArray) => cellInArray.columnIndex === cell.columnIndex);
+  const numbersInColumn = cellsOfCurrentColumn.map((cellOfColumn) => {
+    return (
+      cellOfColumn.value
+    )
+  });
+
+  NUMBERS_OF_SUDOKU.forEach(number => {
+    if (!numbersInColumn.includes(number)) {
+      freeNumbersInColumn.push(number);
+    }
+  });
+
+  // console.log(freeNumbersInColumn);
+
+  // OBTENER LOS NÚMEROS QUE SE PUEDEN PONER EN LA CASILLA ACTUAL, TENIENDO EN CUENTA LOS NÚMEROS LIBRES EN SU SQUARE, COLUMN Y ROW.
+  const posibleNumbersInCell: number[] = [];
+
+  freeNumbersInSquare.forEach(number => {
+    if (freeNumbersInRow.includes(number) && freeNumbersInColumn.includes(number)) {
+      if (!posibleNumbersInCell.includes(number)) {
+        posibleNumbersInCell.push(number);        
+      }
+    }
+  });
+
+  freeNumbersInRow.forEach(number => {
+    if (freeNumbersInSquare.includes(number) && freeNumbersInColumn.includes(number)) {
+      if (!posibleNumbersInCell.includes(number)) {
+        posibleNumbersInCell.push(number);        
+      }
+    }
+  });
+
+  freeNumbersInColumn.forEach(number => {
+    if (freeNumbersInRow.includes(number) && freeNumbersInSquare.includes(number)) {
+      if (!posibleNumbersInCell.includes(number)) {
+        posibleNumbersInCell.push(number);        
+      }
+    }
+  });
+  // console.log('-------------------------------------')
+  // console.log('Posible numbers in this cell: ', posibleNumbersInCell);
+  // console.log('I am this square: ', cell.squareIndex);
+  // console.log('-------------------------------------');
+
+  return posibleNumbersInCell;
 
 }
 
